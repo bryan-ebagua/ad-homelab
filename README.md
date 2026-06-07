@@ -62,3 +62,73 @@ Go to advanced system settings and under computer name change the domain to the 
 Verifying that my client has been added to the domain 
 
 <img width="975" height="686" alt="image" src="https://github.com/user-attachments/assets/d1b5cb93-b2a5-4b91-8f5f-c3d89671a1fd" />
+
+Next on the server VM, I create a CSV file simulating a list of new hires from an HR department (named after basketball players for fun). I then wrote a powershell ISE script to automate the creation of new users and their accounts in Active Directory
+
+<img width="975" height="778" alt="image" src="https://github.com/user-attachments/assets/f8b4c805-385c-49de-a0b2-8d95af6fd039" />
+
+After running this script, the “employees” are now in my default users folder. I created a new Organizational Unit called NBA Employees and moved the players into it.
+
+<img width="975" height="628" alt="image" src="https://github.com/user-attachments/assets/825fc849-97cc-41f7-a3d6-a4a77fa90557" />
+
+Created a Group Policy that restricts users from accessing the Control Panel and applied it to the Organizational Unit. Tested by logging into Lebron James’ account and trying to open settings and control panel. Both were blocked. 
+
+<img width="975" height="747" alt="image" src="https://github.com/user-attachments/assets/d032cb20-f657-4fbd-bd41-146c95a18fd8" />
+
+In a real life scenario, this would be done before adding users to the group. Next step is to build an osTicket helpdesk server. I used the newest release of Ubuntu Server, 26.04. Because this VM needs to access the Internet, it needs two network adapters. The first one is NAT, which allows it to use my laptop’s IP to connect to the internet. The second is the same AD-lab LAN segment from before. This is what the CLI looks like after setup. I also installed openssh server, allowing me to enter commands to the Ubuntu Server VM from my laptop’s terminal instead of the one inside VMware.
+
+<img width="975" height="848" alt="image" src="https://github.com/user-attachments/assets/1211a261-b90f-4fa6-b7f4-908047baa0f7" />
+
+the bash command ip a lists my network interfaces. The 1st one is the loopback interface, the 2nd one is VMware’s NAT, and the 3rd one is an IP address from the windows server I  configured before. Using the first IPv4 address under ens33, I can use ssh to connect to the server from my laptop’s terminal.
+
+<img width="975" height="591" alt="image" src="https://github.com/user-attachments/assets/942fff38-507b-4839-85f7-ebc98cdae347" />
+
+I then install Apache, MariaDB, and PHP. Apache is the web server that will host the osTicket webpage. MariaDB is an open source database that will store the helpdesk tickets, user accounts, and system settings. PHP is the language that osTicket is written in. I have to install it and some other extensions that osTicket depends on. After each install, I enter the command 
+sudo systemctl enable applicationName
+This command makes it so the service will automatically start when the server boots.
+By entering the IP address from earlier in my Brave browser search bar, I can verify that the Apache server is live. 
+
+<img width="975" height="521" alt="image" src="https://github.com/user-attachments/assets/50b3447d-045f-440b-bf90-a3b6ae8d4ed6" />
+Next step is to create the database and a user account that I will use to read and write data. I use “sudo mysql” to open mariaDB, and then run the following SQL queries:
+	CREATE DATABASE osticket_db;
+This, shockingly enough, creates a new database called osticket_db;
+	CREATE USER 'osticket_user'@'localhost' IDENTIFIED BY 'LabPassword123!';
+This creates a new user account to access the database. Localhost means the user has access only from the machine where the MySQL server is running. In this case, that means that the user can access the database from the Ubuntu Server VM, or by using SSH to log into the Ubuntu Server.
+	GRANT ALL PRIVILEGES ON osticket_db.* TO 'osticket_user'@'localhost';
+This grants the new user all privileges on the current level, including data manipulation, structure changes, advanced features, and administration. The only privileges not included are the ability to grant their privileges to others, and the ability to impersonate, or proxy as another user.
+	FLUSH PRIVILEGES;
+This makes the server reload the user permissions from the system database into memory. It ensures the server discards the old cache and reads the current state of the database, so any manual changes will be applied immediately
+	EXIT;
+This exits the database and returns me to the Ubuntu CLI. When I get there I run sudo apt install wget unzip -y. This installs tools to download and unzip files. I can then use wget to download the osTicket installation zip file, and then use unzip to extract the zip file into a new folder called osticket. Folllowing this, I move the osticket files into a specific folder  called /var/www/html/osticket so that Apache can read them. I can then delete the deault “It works!” page. osTicket also requires a specific configuration file to connect to the database I created. They provide a template for the configuration file, so I can copy  it and rename it to ost-config.php using the following command:
+	sudo cp /var/www/html/osticket/include/ost-sampleconfig.php /var/www/html/osticket/include/ost-config.php
+Finally I can grant the web server full ownership of the osTicket files so it can make changes when I configure it in the browser. I do so using these commands
+sudo chown -R www-data:www-data /var/www/html/osticket
+sudo chmod -R 755 /var/www/html/osticket
+The 755 is equal to rwxr-xr-x
+After all these commands I open my browser again and go to https:// 192.168.12.129/osticket, which should lead me to the osTicket graphical installer page, but instead takes me to a page full of code
+
+<img width="975" height="809" alt="image" src="https://github.com/user-attachments/assets/5918f417-b5b3-482e-924d-6152c52c8080" />
+
+It seems this is because Apache can’t interpret the PHP code that osTicket is written in natively. I have to install a module that translates PHP into a form that is readable to Apache.
+
+<img width="747" height="84" alt="image" src="https://github.com/user-attachments/assets/8faeebfe-81cf-4e9d-a329-fa2e23de1cb6" />
+
+Then I restart the apache service, which forces Apache to load the new module
+
+<img width="975" height="45" alt="image" src="https://github.com/user-attachments/assets/28c88063-1d28-45b2-8a6f-7a93590d2a1d" />
+<img width="975" height="808" alt="image" src="https://github.com/user-attachments/assets/ceb64dae-552b-40ca-8c52-486d7dfe34a8" />
+
+Now I got this error. This would indicate that apache is down, but when I check its status (sudo systemctl status apache2), it says active
+
+<img width="975" height="465" alt="image" src="https://github.com/user-attachments/assets/2b93f50a-0af5-4cc6-8170-8515270782c9" />
+
+The issue was that I haven’t installed an SSL certificate on my linux server, so apache is only listening for HTTP, not HTTPS. When I switched to HTTP, I was hit by the wall of code again. 
+After doing some research, Apache on the newest version of Ubuntu uses a traffic-handing system called mpm_event that isn’t compatible with the PHP translator from before. I have to swap apache’s traffic handler to the older mpm_prefork, which is compatible with PHP. I do that with the following commands:
+	sudo a2dismod mpm_event
+Disables the current traffic handler that is having conflicts
+	sudo a2enmod mpm_prefork
+Enables the older traffic handler that should work
+	sudo a2enmod php*
+Enable the PHP translator
+After restarting apache once more and reloading the browser page I can finally see the graphical installer
+<img width="975" height="754" alt="image" src="https://github.com/user-attachments/assets/8f67d7a3-76e5-4e1e-89a2-08f331a80ab6" />
