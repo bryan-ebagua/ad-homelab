@@ -48,7 +48,7 @@ Creating DHCP scope
 Domain Controller is now fully functional. It is running Active Directory, hosting DNS, and has an active DHCP server waiting to hand out IP addresses to new machines.
 Next step is to spin up a Client VM. I’m using Windows 11. Set the LAN segment to the same as the Server VM
 
-<img width="975" height="1008" alt="image" src="https://github.com/user-attachments/assets/479eddad-c7a1-402b-8769-2e146f53b60e" />
+<img width="891" height="912" alt="image" src="https://github.com/user-attachments/assets/967ed4ca-4dc1-460f-975a-865f10132db1" />
 
 This command is inside the windows 11 client vm showing that it received an IP address from the DHCP server 
 Tested connection by pinging the server
