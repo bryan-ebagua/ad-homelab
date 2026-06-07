@@ -12,7 +12,7 @@ Got this error message while trying to spin up Windows Server
 
 Fixed by disabling VMware easy install (removed Ghost Floppy Drive)
 
-<img width="975" height="997" alt="image" src="https://github.com/user-attachments/assets/e4641695-42ae-49ee-a690-a5ea365c512e" />
+<img width="897" height="918" alt="image" src="https://github.com/user-attachments/assets/6d9211f1-5e1f-46c2-8131-ac74e71c2f3e" />
 
 Installing Windows Server
 
