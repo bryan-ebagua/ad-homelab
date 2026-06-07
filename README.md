@@ -3,7 +3,7 @@ First Step: Setting up an isolated private network
 This is done to prevent the DHCP(Dynamic Host Configuration Protocol) Server from assigning IP addresses to my phone, printer, or other devices on my home Wi-Fi.
 To start, I downloaded the evaluation desktop version of Windows Server. I'm not super experienced with powershell so I wanted to hold off on using pure CLI for now.  I created a virtual machine in VMware, set max disk size to 60 GB, then went to hardware, network adapter, and created a LAN segment named AD-Lab
 
-<img width="975" height="988" alt="image" src="https://github.com/user-attachments/assets/3d638dc0-3dcf-453b-a961-e2b243de38a7" />
+<img width="697" height="703" alt="image" src="https://github.com/user-attachments/assets/5702be2e-b6bc-4200-9948-9ef2e7a10bf3" />
 
 I also assigned it 4 GB of RAM. 
 Got this error message while trying to spin up Windows Server
