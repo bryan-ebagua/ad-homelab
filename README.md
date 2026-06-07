@@ -90,7 +90,6 @@ By entering the IP address from earlier in my Brave browser search bar, I can ve
 
 <img width="975" height="521" alt="image" src="https://github.com/user-attachments/assets/50b3447d-045f-440b-bf90-a3b6ae8d4ed6" />
 Next step is to create the database and a user account that I will use to read and write data. I use “sudo mysql” to open mariaDB, and then run the following SQL queries:
-	```SQL
 	CREATE DATABASE osticket_db;
 This, shockingly enough, creates a new database called osticket_db;
 	CREATE USER 'osticket_user'@'localhost' IDENTIFIED BY 'InsertPassword';
