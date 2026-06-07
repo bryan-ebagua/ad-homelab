@@ -90,9 +90,10 @@ By entering the IP address from earlier in my Brave browser search bar, I can ve
 
 <img width="975" height="521" alt="image" src="https://github.com/user-attachments/assets/50b3447d-045f-440b-bf90-a3b6ae8d4ed6" />
 Next step is to create the database and a user account that I will use to read and write data. I use “sudo mysql” to open mariaDB, and then run the following SQL queries:
+	```SQL
 	CREATE DATABASE osticket_db;
 This, shockingly enough, creates a new database called osticket_db;
-	CREATE USER 'osticket_user'@'localhost' IDENTIFIED BY 'LabPassword123!';
+	CREATE USER 'osticket_user'@'localhost' IDENTIFIED BY 'InsertPassword';
 This creates a new user account to access the database. Localhost means the user has access only from the machine where the MySQL server is running. In this case, that means that the user can access the database from the Ubuntu Server VM, or by using SSH to log into the Ubuntu Server.
 	GRANT ALL PRIVILEGES ON osticket_db.* TO 'osticket_user'@'localhost';
 This grants the new user all privileges on the current level, including data manipulation, structure changes, advanced features, and administration. The only privileges not included are the ability to grant their privileges to others, and the ability to impersonate, or proxy as another user.
