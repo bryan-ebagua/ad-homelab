@@ -132,3 +132,35 @@ Enables the older traffic handler that should work
 Enable the PHP translator
 After restarting apache once more and reloading the browser page I can finally see the graphical installer
 <img width="975" height="754" alt="image" src="https://github.com/user-attachments/assets/8f67d7a3-76e5-4e1e-89a2-08f331a80ab6" />
+
+After clicking continue, I can configure osTicket to use the database I set up earlier
+
+<img width="975" height="1286" alt="image" src="https://github.com/user-attachments/assets/b7cf64d6-9d2b-4210-8f78-f6673c7c860b" />
+
+After this, I remove write access to the configuration file and delete the setup wizard so that a malicious user can’t rerun it and overwrite the database.
+
+<img width="975" height="58" alt="image" src="https://github.com/user-attachments/assets/dfc67691-375e-4f89-ae5d-82799a6de32d" />
+
+At this point I have created two important urls. 
+http://192.168.12.129/osticket/ is where end users go to log in. Adding /scp at the end directs to the backend IT dashboard, where I will answer tickets and configure the system.
+Now I configure LDAP, which allows osTicket to verify employee sign-ins by communicating with the Windows Server. First I have to install an extension that allows the PHP enginge to learn the LDAP language, and refresh Apache so that the change gets applied to the web server.
+
+<img width="975" height="33" alt="image" src="https://github.com/user-attachments/assets/69a888e4-a33d-4e45-8bdb-dd9d833f6a62" />
+
+osTicket uses an official plugin to handle LDAP, so I have to download it on my laptop and copy it over the network to my Ubuntu VM. I use the secure copy command in a new powershell window. Then I have to move the new plugin into osTicket’s plugins folder. Now I can go to the admin control panel on my osTicket site and configure the LDAP plugin for the Windows Server VM
+
+<img width="975" height="811" alt="image" src="https://github.com/user-attachments/assets/5f1a3d27-eb1f-4731-bc7c-1dc621fd817e" />
+
+To test what just happened, I will use the Windows 11 Client VM. I log in as Stephen Curry this time, and then I open Microsoft Edge and go to the end user portal that I created earlier.
+
+<img width="975" height="693" alt="image" src="https://github.com/user-attachments/assets/eed27fdb-0cd4-4f38-8af5-e9a02dbfb395" />
+
+I don’t know why this happened. I tried checking apache status, but it says it is active and running. I tested the connection with a ping, and this is what I got. I had to change the client VM’s network adapter from the LAN segment I created earlier to the NAT, which allows it to share my laptop’s IP address. I reached the website, but now I can’t log in. By changing the url to include the third IP address that comes up when I call ip a in the Ubuntu VM, I’m able to reach the osTicket website and log in successfully.  
+
+<img width="942" height="331" alt="image" src="https://github.com/user-attachments/assets/2109dfa9-a302-4783-9153-39b4575127ab" />
+
+I tried logging in with Steph Curry’s credentials, but it kept saying access denied and eventually I got locked out
+
+<img width="975" height="795" alt="image" src="https://github.com/user-attachments/assets/5d602f65-98d2-40ab-a3fa-eeca44d6abd1" />
+
+I tried several troubleshooting methods and I was able to get past the sign in screen, but now I’m stuck not being able to create an account. I’ll put a pin in this for now and come back to it later.
