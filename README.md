@@ -70,3 +70,23 @@ CREATE USER 'osticket_user'@'localhost' IDENTIFIED BY 'LabPassword123!';
 GRANT ALL PRIVILEGES ON osticket_db.* TO 'osticket_user'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
+```
+### Part 3: LDAP Integration & Client Testing
+
+#### Phase 1: Directory Bridge Configuration
+* Installed the required PHP extension to allow the web engine to process LDAP queries.
+* Transferred the official osTicket LDAP plugin securely from a local host to the Ubuntu VM using PowerShell `scp`.
+* Moved the plugin binaries into the application's target directory and executed an Apache service refresh to apply the changes.
+* Configured the LDAP plugin parameters within the osTicket admin control panel to bridge the web application with the Windows Server Domain Controller.
+
+#### Phase 2: Cross-Platform Connection Testing
+* Switched over to the Windows 11 Client VM and authenticated under a provisioned domain-user account (Stephen Curry) to validate the end-user portal experience.
+* Attempted to reach the web server via the browser but encountered a connection timeout, despite verifying that the Apache service was active.
+* Diagnosed a routing boundary issue: altered the client VM's network adapter from the isolated LAN segment to NAT. This restored basic web connectivity but disrupted the application's internal login routing.
+* Re-targeted the browser URL to point directly to the Ubuntu server's internal `AD-Lab` interface IP, successfully establishing a clean connection to the helpdesk portal.
+
+#### Phase 3: Authentication Troubleshooting (Work in Progress)
+* Attempted to authenticate into the helpdesk portal using the Active Directory domain credentials.
+* Encountered repeated "Access Denied" errors, ultimately resulting in a system lockout.
+* Executed several backend troubleshooting methods to bypass the initial lockouts, successfully reaching the secondary sign-in stage, but encountered a bug preventing final account creation.
+* Pinned this directory authentication bug for future log analysis and LDAP schema troubleshooting.
