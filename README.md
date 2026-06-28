@@ -1,13 +1,13 @@
 # On-Premises Active Directory Infrastructure & Helpdesk Integration Lab
 
-## 📌 Project Overview
+##  Project Overview
 In this project, I designed, deployed, and configured an end-to-end isolated enterprise IT environment using VMware Workstation. I divided my deployment into two core phases: 
 1. **Windows Server Infrastructure:** Building an on-premises Windows Server 2022 Active Directory domain controller, setting up network boundaries, establishing automated user lifecycle provisioning via PowerShell, and enforcing endpoint security policies using Group Policy Objects (GPOs).
 2. **Linux & Helpdesk Integration:** Deploying a dedicated Ubuntu Linux helpdesk server running osTicket, configuring a LAMP environment, resolving advanced web server execution policies, and testing cross-platform LDAP authentication directory lookups.
 
 ---
 
-## 🛠️ Technologies & Skills Gained
+##  Technologies & Skills Gained
 * **Virtualization & Isolation:** VMware Workstation Pro/Player, Private LAN Segments, NAT Adapter Multiplexing.
 * **Windows Server Administration:** Active Directory Domain Services (AD DS), Domain Name System (DNS), Dynamic Host Configuration Protocol (DHCP) Scopes.
 * **Automation & Scripting:** PowerShell ISE automation, CSV-driven identity provisioning.
@@ -18,7 +18,7 @@ In this project, I designed, deployed, and configured an end-to-end isolated ent
 
 ---
 
-## 📐 Network Architecture & Design
+##  Network Architecture & Design
 To prevent conflicts with my live home network (such as consumer routers handing out conflicting DHCP addresses), I strictly confined the core infrastructure to an isolated internal virtual network segment named `AD-Lab`.
 
 ### Infrastructure Scheme
@@ -30,7 +30,7 @@ To prevent conflicts with my live home network (such as consumer routers handing
 
 ---
 
-## 🚀 Deployment Phases
+##  Deployment Phases
 
 ### Part 1: Windows Active Directory Infrastructure
 
